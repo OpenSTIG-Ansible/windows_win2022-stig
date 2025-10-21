@@ -4,12 +4,16 @@
 
   tasks:
     - name: Install required PowerShell modules (DSCEA and PowerSTIG)
-      community.windows.win_psmodule:
-        name:
-          - DSCEA
-          - PowerSTIG
-        state: present
+      ansible.windows.win_powershell:
+        script: |
+          $modules = @('DSCEA', 'PowerSTIG')
+          foreach ($module in $modules) {
+              if (-not (Get-Module -ListAvailable -Name $module)) {
+                  Install-Module -Name $module -Scope AllUsers -Force -Confirm:$false
+              }
+          }
       register: module_install
+      changed_when: "'Successfully installed' in module_install.stdout"
 
     - name: Apply Windows Server 2022 STIG (V2R4)
       ansible.windows.win_powershell:
