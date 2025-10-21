@@ -12,8 +12,6 @@
                   Install-Module -Name $module -Scope AllUsers -Force -Confirm:$false
               }
           }
-      register: module_install
-      changed_when: "'Successfully installed' in module_install.stdout"
 
     - name: Apply Windows Server 2022 STIG (V2R4)
       ansible.windows.win_powershell:
