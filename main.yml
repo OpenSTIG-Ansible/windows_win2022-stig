@@ -15,10 +15,10 @@
 
     - name: Apply Windows Server 2022 STIG (V2R4) using DSC
       ansible.windows.win_dsc:
-        resource_name: WindowsServer
+        resource_name: PowerStig
         OsVersion: '2022'
         OsRole: 'MS'
-        StigVersion: '1.5' # Corresponds to V2R4 for Server 2022 MS
+        StigVersion: '2.4'
         reboot_if_needed: true
       register: dsc_apply
 
