@@ -5,7 +5,7 @@
 
   tasks:
     - name: Install required PowerShell modules (DSCEA and PowerSTIG)
-      ansible.windows.win_psmodule:
+      community.windows.win_psmodule:
         name:
           - DSCEA
           - PowerSTIG
