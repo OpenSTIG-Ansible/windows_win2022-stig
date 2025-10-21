@@ -1,6 +1,6 @@
 ---
 - name: Apply Windows Server 2022 STIG using PowerSTIG
-  hosts: "{{ run_on }}"
+  hosts: "{{ run_against }}"
   gather_facts: false
 
   tasks:
