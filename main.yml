@@ -1,0 +1,33 @@
+---
+- name: Apply Windows Server 2022 STIG using PowerSTIG
+  hosts: windows_servers
+  gather_facts: false
+
+  tasks:
+    - name: Install required PowerShell modules (DSCEA and PowerSTIG)
+      ansible.windows.win_psmodule:
+        name:
+          - DSCEA
+          - PowerSTIG
+        state: present
+      register: module_install
+
+    - name: Apply Windows Server 2022 STIG (V2R4)
+      ansible.windows.win_powershell:
+        script: |
+          # This configuration hash table will be passed to Invoke-Stig
+          $stigParams = @{
+              Role        = 'WindowsServer2022'
+              StigVersion = 'V2R4'
+              Reboot      = 'IfNeeded'
+          }
+
+          # Run the remediation
+          Invoke-Stig @stigParams
+      register: powerstig_apply
+      changed_when: "'DSC resources were applied' in powerstig_apply.stdout"
+
+    - name: Display PowerSTIG output
+      ansible.builtin.debug:
+        var: powerstig_apply.stdout_lines
+      when: powerstig_apply.stdout_lines is defined and powerstig_apply.stdout_lines | length > 0
