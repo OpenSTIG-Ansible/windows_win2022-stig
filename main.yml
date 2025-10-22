@@ -1,28 +1,8 @@
 ---
-- name: Apply Windows Server 2022 STIG using PowerSTIG
+- name: Apply Windows Server 2022 STIG using Ansible Lockdown role
   hosts: "{{ run_against }}"
 
   tasks:
-    - name: Install required PowerShell modules (DSCEA and PowerSTIG)
-      ansible.windows.win_powershell:
-        script: |
-          $modules = @('DSCEA', 'PowerSTIG')
-          foreach ($module in $modules) {
-              if (-not (Get-Module -ListAvailable -Name $module)) {
-                  Install-Module -Name $module -Scope AllUsers -Force -Confirm:$false
-              }
-          }
-
-    - name: Apply Windows Server 2022 STIG (V2R4) using DSC
-      ansible.windows.win_dsc:
-        resource_name: PowerStig
-        OsVersion: '2022'
-        OsRole: 'MS'
-        StigVersion: '2.4'
-        reboot_if_needed: true
-      register: dsc_apply
-
-    - name: Display PowerSTIG DSC output
-      ansible.builtin.debug:
-        var: dsc_apply
-      when: dsc_apply is defined
+    - name: Run the Ansible Lockdown role
+      ansible.builtin.import_role:
+        name: windows-2022-stig

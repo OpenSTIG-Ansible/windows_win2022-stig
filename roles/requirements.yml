@@ -1,0 +1,3 @@
+# requirements.yml
+- src: https://github.com/ansible-lockdown/Windows-2022-STIG.git
+  name: windows-2022-stig
